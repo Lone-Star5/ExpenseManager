@@ -28,7 +28,7 @@ const expenseSchema = new mongoose.Schema({
     itemName: String,
     amount: Number,
     date: { type: Date, default: Date.now },
-    delete: Boolean
+    delete: {type: Boolean, default: false}
 })
 const expense = mongoose.model('expense',expenseSchema);
 
@@ -56,7 +56,10 @@ const data = [
     }
 ]
 app.get('/', (req,res)=>{
-    res.render('index',{data: data})
+    category.find({}, (err,categories)=>{
+
+        res.render('index',{data: data, categories:categories})
+    })
 })
 
 app.get('/settings',(req,res)=>{
@@ -65,12 +68,27 @@ app.get('/settings',(req,res)=>{
 
 app.post('/expense/new', (req,res) =>{
     console.log(req.body);
-    res.redirect('/')
+    let newexpense = req.body;
+    category.findById(req.body.category, (err,category)=>{
+        newexpense.category = category;
+        expense.create(newexpense, (err,newexpense)=>{
+            if(err)
+                throw err;
+            console.log('added new expense');
+            res.redirect('/')
+        })
+    })
 })
 
 app.post('/category/new', (req,res) =>{
-    console.log(req.body);
-    res.redirect('/settings')
+    // console.log(req.body);
+    let newcategory = req.body;
+    category.create(newcategory, (err,newcategory)=>{
+        if(err)
+            throw err;
+        console.log('added new category')
+        res.redirect('/settings')
+    })
 })
 
 app.listen('3000', ()=>{
