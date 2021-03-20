@@ -106,7 +106,7 @@
                     <% data.forEach( data =>{ %>
                         <div class="row expense-items">
                             <div class="col-md-3">
-                                <%= data.category %>
+                                <%= data.category.title %>
                             </div>
                             <div class="col-md-3">
                                 <%= data.itemName %>
@@ -114,8 +114,8 @@
                             <div class="col-md-2">
                                 <%= data.amount %>
                             </div>
-                            <div class="col-md-2">
-                                <%= data.date %>
+                            <div class="col-md-3">
+                                <%= data.date.toDateString() %>
                             </div>
                         </div>
                     <% }) %>

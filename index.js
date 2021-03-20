@@ -57,8 +57,10 @@ const data = [
 ]
 app.get('/', (req,res)=>{
     category.find({}, (err,categories)=>{
-
-        res.render('index',{data: data, categories:categories})
+        expense.find({}).populate('category').exec((err,expenses)=>{
+            console.log(expenses);
+            res.render('index',{data: expenses, categories:categories})
+        })
     })
 })
 
@@ -67,13 +69,14 @@ app.get('/settings',(req,res)=>{
 })
 
 app.post('/expense/new', (req,res) =>{
-    console.log(req.body);
     let newexpense = req.body;
-    category.findById(req.body.category, (err,category)=>{
-        newexpense.category = category;
+    category.findById(req.body.category, (err,newcategory)=>{
+        newexpense.category = newcategory;
+        console.log('newexpense',newexpense);
         expense.create(newexpense, (err,newexpense)=>{
             if(err)
                 throw err;
+            console.log('newexpense',newexpense)
             console.log('added new expense');
             res.redirect('/')
         })
