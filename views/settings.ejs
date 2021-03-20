@@ -2,17 +2,20 @@
 <%- include("partials/header") %>
 
     <div class="col-md-9">
-        <div class="row settings-items">
-            <div class="col-md-4">
-                Total Budget
+        <form method="POST" action="/budget/new">
+            <div class="row settings-items">
+                <div class="col-md-4">
+                    Total Budget
+                </div>
+                <div class="col-md-4">
+                    <input name="budget" type="number" placeholder="1000000">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-warning">Update</button>
+                </div>
             </div>
-            <div class="col-md-4">
-                <input type="number" placeholder="1000000">
-            </div>
-            <div class="col-md-4">
-                <button class="btn btn-warning">Update</button>
-            </div>
-        </div>
+        </form>
+
         <form method="POST" action="/category/new">
             <div class="row settings-items">
                 <div class="col-md-4">

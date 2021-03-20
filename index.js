@@ -33,8 +33,8 @@ const expenseSchema = new mongoose.Schema({
 const expense = mongoose.model('expense',expenseSchema);
 
 const budgetSchema = new mongoose.Schema({
-    budget: Number,
-    expenditure: Number
+    budget: {type:Number, default: 0},
+    expenditure: {type: Number, default: 0}
 })
 const budget = mongoose.model('budget', budgetSchema);
 
@@ -58,7 +58,7 @@ const data = [
 app.get('/', (req,res)=>{
     category.find({}, (err,categories)=>{
         expense.find({}).populate('category').exec((err,expenses)=>{
-            console.log(expenses);
+            // console.log(expenses);
             res.render('index',{data: expenses, categories:categories})
         })
     })
@@ -72,19 +72,47 @@ app.post('/expense/new', (req,res) =>{
     let newexpense = req.body;
     category.findById(req.body.category, (err,newcategory)=>{
         newexpense.category = newcategory;
-        console.log('newexpense',newexpense);
+        // console.log('newexpense',newexpense);
         expense.create(newexpense, (err,newexpense)=>{
             if(err)
                 throw err;
-            console.log('newexpense',newexpense)
-            console.log('added new expense');
-            res.redirect('/')
+            budget.find({},(err,oldbudget)=>{
+                oldbudget[0].expenditure = oldbudget[0].expenditure + newexpense.amount;
+                budget.updateOne({},oldbudget[0], (err,newbudget)=>{
+                    res.redirect('/')
+                })
+            })
         })
     })
 })
 
+app.post('/expense/edit', (req,res)=>{
+    console.log(req.body);
+    req.body.delete = false;
+    category.findById(req.body.category, (err,newcategory) =>{
+        req.body.category = newcategory;
+        let id = req.body.id
+        delete req.body.id;
+        expense.findById(id,(err,oldexpense)=>{
+            let oldamt = oldexpense.amount;
+            console.log(oldamt)
+            expense.findByIdAndUpdate(id, req.body, (err,newexpense)=>{
+                console.log(newexpense)
+                budget.find({},(err,oldbudget)=>{
+                    oldbudget[0].expenditure = oldbudget[0].expenditure - oldamt + newexpense.amount;
+                    budget.updateOne({},oldbudget[0], (err,newbudget)=>{
+                        console.log(newbudget)
+                        res.redirect('/')
+                    })
+                })
+            })
+
+        })
+    })
+    
+})
+
 app.post('/category/new', (req,res) =>{
-    // console.log(req.body);
     let newcategory = req.body;
     category.create(newcategory, (err,newcategory)=>{
         if(err)
@@ -93,6 +121,15 @@ app.post('/category/new', (req,res) =>{
         res.redirect('/settings')
     })
 })
+
+app.post('/budget/new', (req,res) => {
+    console.log(req.body);
+    budget.findOneAndUpdate({},{budget: req.body.budget,expenditure: 0} ,{upsert:true}, (err, newbudget)=>{
+        console.log('budget updated',newbudget)
+        res.redirect('/settings')
+    })
+})
+
 
 
 app.listen('3000', ()=>{

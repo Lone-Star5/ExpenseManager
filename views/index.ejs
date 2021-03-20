@@ -68,23 +68,23 @@
                                 <form method="POST" action='/expense/new'>
                                     <div class="modal-body">
                                         <label>Category</label>
-                                        <select name="category">
+                                        <select name="category" required>
                                             <% categories.forEach(category=>{ %>
-                                                <option value="<%=category.id%>"><%=category.title%></option>
+                                                <option value="<%=category._id%>"><%=category.title%></option>
                                                 <% }) %>
                                         </select>
                                     </div>
                                     <div class="modal-body">
                                         <label>Item Name</label>
-                                        <input name="itemName" type="text">
+                                        <input name="itemName" type="text" required>
                                     </div>
                                     <div class="modal-body">
                                         <label>Amount</label>
-                                        <input type="number" name="amount">
+                                        <input type="number" name="amount" required>
                                     </div>
                                     <div class="modal-body">
                                         <label>Date</label>
-                                        <input type="date" name="date">
+                                        <input type="date" name="date" required>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -103,8 +103,9 @@
                         <div class="col-md-2">Amount</div>
                         <div class="col-md-2">Date</div>
                     </div>
-                    <% data.forEach( data =>{ %>
+                    <% data.forEach( (data,i) =>{ %>
                         <div class="row expense-items">
+                            <div class="col-md-1 edit"  data-id="<%=data._id%>" data-bs-toggle="modal" data-bs-target="#editmodal">Edit</div>
                             <div class="col-md-3">
                                 <%= data.category.title %>
                             </div>
@@ -119,6 +120,47 @@
                             </div>
                         </div>
                     <% }) %>
+                    
+                    <div class="modal fade" id="editmodal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                            
+                        <div class="modal-dialog">
+                        <div class="modal-content">
+                            
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="editModalLabel">Edit Expense</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form method="POST" action='/expense/edit'>
+                                <input id="edit-id" name="id" style="display:none;">
+                                <div class="modal-body">
+                                    <label>Category</label>
+                                    <select name="category" required>
+                                        <% categories.forEach( category => { %>
+                                            <option value="<%=category._id%>"><%=category.title%></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class="modal-body">
+                                    <label>Item Name</label>
+                                    <input id="edit-itemName" name="itemName" type="text" required>
+                                </div>
+                                <div class="modal-body">
+                                    <label>Amount</label>
+                                    <input id="edit-amount" type="number" name="amount" required>
+                                </div>
+                                <div class="modal-body">
+                                    <label>Date</label>
+                                    <input id="edit-date" type="date" name="date" required>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
