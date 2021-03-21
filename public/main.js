@@ -9,7 +9,6 @@ navItems[1].addEventListener('click',()=>{
 
 Array.from(document.querySelectorAll('.edit')).forEach((data)=>{
     data.addEventListener('click',(e)=>{
-        let newdata = '<%- JSON.stringify(data) %>' ;
         let par = e.target.parentNode.childNodes;
         // console.log(e.target.dataset.id)
         document.getElementById('edit-id').value = e.target.dataset.id;
@@ -22,7 +21,7 @@ Array.from(document.querySelectorAll('.edit')).forEach((data)=>{
     
 })
 
-Array.from(document.querySelectorAll('.not-delete')).forEach((data)=>{
+Array.from(document.querySelectorAll('.delete-item')).forEach((data)=>{
     data.addEventListener('click',(e)=>{
         let ele = e.target;
         let id = ele.dataset.id 
@@ -44,3 +43,12 @@ Array.from(document.querySelectorAll('.not-delete')).forEach((data)=>{
     })
     
 })
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}

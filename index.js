@@ -64,8 +64,18 @@ const data = [
 app.get('/', (req,res)=>{
     category.find({}, (err,categories)=>{
         expense.find({}).populate('category').exec((err,expenses)=>{
-            // console.log(expenses);
-            res.render('index',{data: expenses, categories:categories})
+            let categorydata = {}
+            expenses.forEach(exp=>{
+                if(exp.delete==false){
+                    if(categorydata[exp.category.title]==undefined)
+                    categorydata[exp.category.title]=exp.amount
+                    else
+                        categorydata[exp.category.title]+=exp.amount;
+                }  
+            })
+            budget.find({}, (err, budget)=>{
+                res.render('index',{data: expenses, categories:categories, budget: budget[0],categorydata:categorydata})
+            })
         })
     })
 })
@@ -119,14 +129,21 @@ app.post('/expense/edit', (req,res)=>{
 app.post('/expense/delete', (req,res)=>{
     expense.findById({_id:req.body.id },(err,newexpense)=>{
         if(err) throw err;
+        let temp = newexpense.delete;
         newexpense.delete=true;
         expense.findByIdAndUpdate(req.body.id,newexpense,(err,updatedexpense)=>{
-            budget.findOne({},(err,oldbudget)=>{
-                oldbudget.expenditure-=newexpense.amount;
-                budget.updateOne({}, oldbudget, (err,newbudget)=>{
-                    res.json({message: 'success'});
+            if(temp==true){
+                res.json({message:'success'})
+            }
+            else
+            {
+                budget.findOne({},(err,oldbudget)=>{
+                    oldbudget.expenditure-=newexpense.amount;
+                    budget.updateOne({}, oldbudget, (err,newbudget)=>{
+                        res.json({message: 'success'});
+                    })
                 })
-            })
+            }
         })
     })
 })
@@ -143,7 +160,7 @@ app.post('/category/new', (req,res) =>{
 
 app.post('/budget/new', (req,res) => {
     console.log(req.body);
-    budget.findOneAndUpdate({},{budget: req.body.budget,expenditure: 0} ,{upsert:true}, (err, newbudget)=>{
+    budget.findOneAndUpdate({},{budget: req.body.budget} ,{upsert:true}, (err, newbudget)=>{
         console.log('budget updated',newbudget)
         res.redirect('/settings')
     })
