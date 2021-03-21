@@ -18,7 +18,8 @@ navItems[5].addEventListener('click',()=>{
 
 Array.from(document.querySelectorAll('.edit')).forEach((data)=>{
     data.addEventListener('click',(e)=>{
-        let par = e.target.parentNode.childNodes;
+        let par = e.target.parentNode.parentNode.parentNode.parentNode.childNodes;
+        console.log(par)
         // console.log(e.target.dataset.id)
         document.getElementById('edit-id').value = e.target.dataset.id;
         console.log(par[9].innerText)

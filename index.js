@@ -118,20 +118,19 @@ app.post('/expense/delete', isLoggedIn,(req,res)=>{
     expense.findById({_id:req.body.id },(err,newexpense)=>{
         if(err) throw err;
         let temp = newexpense.delete;
-        newexpense.delete=true;
+        newexpense.delete=!temp;
         expense.findByIdAndUpdate(req.body.id,newexpense,(err,updatedexpense)=>{
-            if(temp==true){
-                res.json({message:'success'})
-            }
+            
+        budget.findOne({user:req.user},(err,oldbudget)=>{
+            if(temp==false)
+                oldbudget.expenditure-=newexpense.amount;
             else
-            {
-                budget.findOne({user:req.user},(err,oldbudget)=>{
-                    oldbudget.expenditure-=newexpense.amount;
-                    budget.updateOne({user:req.user}, oldbudget, (err,newbudget)=>{
-                        res.json({message: 'success'});
-                    })
-                })
-            }
+                oldbudget.expenditure+=newexpense.amount;
+            budget.updateOne({user:req.user}, oldbudget, (err,newbudget)=>{
+                res.json({message: 'success'});
+            })
+        })
+            
         })
     })
 })
