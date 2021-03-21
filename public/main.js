@@ -7,7 +7,6 @@ navItems[1].addEventListener('click',()=>{
     window.location = '/settings';
 })
 
-console.log(Array.from(document.getElementsByClassName('edit')))
 Array.from(document.querySelectorAll('.edit')).forEach((data)=>{
     data.addEventListener('click',(e)=>{
         let newdata = '<%- JSON.stringify(data) %>' ;
@@ -19,6 +18,29 @@ Array.from(document.querySelectorAll('.edit')).forEach((data)=>{
         document.getElementById('edit-amount').value = par[7].innerText;
         
         console.log(par);
+    })
+    
 })
+
+Array.from(document.querySelectorAll('.not-delete')).forEach((data)=>{
+    data.addEventListener('click',(e)=>{
+        let ele = e.target;
+        let id = ele.dataset.id 
+        console.log(ele)
+        console.log(id)
+        let object = JSON.stringify({"id":id})
+        console.log(object)
+        fetch('/expense/delete', {
+            method: 'POST',
+            // mode: 'cors', // this cannot be 'no-cors'
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body: object,
+        }).then( response => response.json()).then((data)=>{
+            if(data.message=='success')
+                location.reload();
+        })
+    })
     
 })

@@ -7,6 +7,9 @@ const mongoose = require('mongoose');
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(express.json({
+    type: ['application/json', 'text/plain']
+  }))
 
 mongoose.connect('mongodb://localhost:27017/expenseManager', {
   useNewUrlParser: true,
@@ -79,7 +82,7 @@ app.post('/expense/new', (req,res) =>{
         expense.create(newexpense, (err,newexpense)=>{
             if(err)
                 throw err;
-            budget.findOneAndUpdate({},{budget: 0, expenditure:req.body.amount},(err,oldbudget)=>{
+            budget.findOneAndUpdate({},{budget: 0, expenditure:req.body.amount},{upsert:true},(err,oldbudget)=>{
                 if(oldbudget!=null)
                     oldbudget.expenditure = oldbudget.expenditure + newexpense.amount;
                 budget.updateOne({},oldbudget, (err,newbudget)=>{
@@ -110,6 +113,22 @@ app.post('/expense/edit', (req,res)=>{
         })
     })
     
+})
+
+
+app.post('/expense/delete', (req,res)=>{
+    expense.findById({_id:req.body.id },(err,newexpense)=>{
+        if(err) throw err;
+        newexpense.delete=true;
+        expense.findByIdAndUpdate(req.body.id,newexpense,(err,updatedexpense)=>{
+            budget.findOne({},(err,oldbudget)=>{
+                oldbudget.expenditure-=newexpense.amount;
+                budget.updateOne({}, oldbudget, (err,newbudget)=>{
+                    res.json({message: 'success'});
+                })
+            })
+        })
+    })
 })
 
 app.post('/category/new', (req,res) =>{

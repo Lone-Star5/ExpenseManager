@@ -104,7 +104,10 @@
                         <div class="col-md-2">Date</div>
                     </div>
                     <% data.forEach( (data,i) =>{ %>
-                        <div class="row expense-items">
+                        <div class=" <% if(data.delete==true) { %>
+                                delete
+                        <% } else { %> not-delete <% } %>
+                        row expense-items">
                             <div class="col-md-1 edit"  data-id="<%=data._id%>" data-bs-toggle="modal" data-bs-target="#editmodal">Edit</div>
                             <div class="col-md-3">
                                 <%= data.category.title %>
@@ -112,12 +115,13 @@
                             <div class="col-md-3">
                                 <%= data.itemName %>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <%= data.amount %>
                             </div>
                             <div class="col-md-3">
                                 <%= data.date.toDateString() %>
                             </div>
+                            <div data-id = "<%=data._id%>"class="delete-item col-md-1">delete</div>
                         </div>
                     <% }) %>
                     
