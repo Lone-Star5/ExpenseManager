@@ -93,6 +93,8 @@ app.post('/expense/new', isLoggedIn, (req,res) =>{
 
 app.post('/expense/edit', isLoggedIn, (req,res)=>{
     req.body.delete = false;
+    console.log(req.body)
+    req.body.user = req.user;
     category.findById(req.body.category, (err,newcategory) =>{
         req.body.category = newcategory;
         let id = req.body.id

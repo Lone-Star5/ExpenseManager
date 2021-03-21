@@ -19,14 +19,11 @@ navItems[5].addEventListener('click',()=>{
 Array.from(document.querySelectorAll('.edit')).forEach((data)=>{
     data.addEventListener('click',(e)=>{
         let par = e.target.parentNode.parentNode.parentNode.parentNode.childNodes;
-        console.log(par)
         // console.log(e.target.dataset.id)
         document.getElementById('edit-id').value = e.target.dataset.id;
         console.log(par[9].innerText)
         document.getElementById('edit-itemName').value = par[5].innerText;
-        document.getElementById('edit-amount').value = par[7].innerText;
-        
-        console.log(par);
+        document.getElementById('edit-amount').value = par[7].innerText;        
     })
     
 })
