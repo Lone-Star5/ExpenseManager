@@ -38,6 +38,9 @@ const budgetSchema = new mongoose.Schema({
 })
 const budget = mongoose.model('budget', budgetSchema);
 
+// budget.create({budget: 0, expenditure: 0},(err, newbudget)=>{
+//     console.log('budget created');
+// })
 
 const data = [
     {
@@ -76,9 +79,10 @@ app.post('/expense/new', (req,res) =>{
         expense.create(newexpense, (err,newexpense)=>{
             if(err)
                 throw err;
-            budget.find({},(err,oldbudget)=>{
-                oldbudget[0].expenditure = oldbudget[0].expenditure + newexpense.amount;
-                budget.updateOne({},oldbudget[0], (err,newbudget)=>{
+            budget.findOneAndUpdate({},{budget: 0, expenditure:req.body.amount},(err,oldbudget)=>{
+                if(oldbudget!=null)
+                    oldbudget.expenditure = oldbudget.expenditure + newexpense.amount;
+                budget.updateOne({},oldbudget, (err,newbudget)=>{
                     res.redirect('/')
                 })
             })
@@ -87,7 +91,6 @@ app.post('/expense/new', (req,res) =>{
 })
 
 app.post('/expense/edit', (req,res)=>{
-    console.log(req.body);
     req.body.delete = false;
     category.findById(req.body.category, (err,newcategory) =>{
         req.body.category = newcategory;
@@ -95,13 +98,10 @@ app.post('/expense/edit', (req,res)=>{
         delete req.body.id;
         expense.findById(id,(err,oldexpense)=>{
             let oldamt = oldexpense.amount;
-            console.log(oldamt)
             expense.findByIdAndUpdate(id, req.body, (err,newexpense)=>{
-                console.log(newexpense)
                 budget.find({},(err,oldbudget)=>{
-                    oldbudget[0].expenditure = oldbudget[0].expenditure - oldamt + newexpense.amount;
+                    oldbudget[0].expenditure = oldbudget[0].expenditure - oldamt + Number(req.body.amount);
                     budget.updateOne({},oldbudget[0], (err,newbudget)=>{
-                        console.log(newbudget)
                         res.redirect('/')
                     })
                 })
