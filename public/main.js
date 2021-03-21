@@ -6,6 +6,15 @@ navItems[0].addEventListener('click',()=>{
 navItems[1].addEventListener('click',()=>{
     window.location = '/settings';
 })
+navItems[3].addEventListener('click',()=>{
+    window.location='/register';
+})
+navItems[4].addEventListener('click',()=>{
+    window.location='/login';
+})
+navItems[5].addEventListener('click',()=>{
+    window.location='/logout';
+})
 
 Array.from(document.querySelectorAll('.edit')).forEach((data)=>{
     data.addEventListener('click',(e)=>{
@@ -44,11 +53,3 @@ Array.from(document.querySelectorAll('.delete-item')).forEach((data)=>{
     
 })
 
-function getRandomColor() {
-    var letters = '0123456789ABCDEF'.split('');
-    var color = '#';
-    for (var i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
