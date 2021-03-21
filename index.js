@@ -7,6 +7,8 @@ const LocalStrategy	= require("passport-local");
 const methodOverride = require("method-override");
 const User = require('./models/user');
 const category = require('./models/category');
+const expense = require('./models/expense');
+const budget = require('./models/budget');
 
 
 app.set("view engine", "ejs");
@@ -44,43 +46,6 @@ mongoose.connect('mongodb://localhost:27017/expenseManager', {
 });
 
 
-const expenseSchema = new mongoose.Schema({
-    user: {type: mongoose.Schema.Types.ObjectId, ref:'User'},
-    category: {type: mongoose.Schema.Types.ObjectId, ref:'category'},
-    itemName: String,
-    amount: Number,
-    date: { type: Date, default: Date.now },
-    delete: {type: Boolean, default: false}
-})
-const expense = mongoose.model('expense',expenseSchema);
-
-const budgetSchema = new mongoose.Schema({
-    user: {type: mongoose.Schema.Types.ObjectId, ref:'User'},
-    budget: {type:Number, default: 0},
-    expenditure: {type: Number, default: 0}
-})
-const budget = mongoose.model('budget', budgetSchema);
-
-// budget.create({budget: 0, expenditure: 0},(err, newbudget)=>{
-//     console.log('budget created');
-// })
-
-const data = [
-    {
-        category: 'Grocery',
-        itemName: 'Eggs',
-        amount: 250,
-        date: '12/07/2000',
-        delete: false
-    }, 
-    {
-        category: 'Grocery',
-        itemName: 'Bread',
-        amount: 40,
-        date: '13/07/2000',
-        delete: false
-    }
-]
 app.get('/', isLoggedIn, (req,res)=>{
     category.find({user:req.user}, (err,categories)=>{
         expense.find({user: req.user}).populate('category').exec((err,expenses)=>{
