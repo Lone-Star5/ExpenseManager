@@ -31,7 +31,7 @@ sudo service mongodb start
 Now you can start the server using the following command and open `localhost:3000` in your browser to view the wesbite.
 
 ```bash
-npm start
+node index.js
 ```
 
 
