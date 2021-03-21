@@ -6,13 +6,13 @@ navItems[0].addEventListener('click',()=>{
 navItems[1].addEventListener('click',()=>{
     window.location = '/settings';
 })
-navItems[3].addEventListener('click',()=>{
+navItems[2].addEventListener('click',()=>{
     window.location='/register';
 })
-navItems[4].addEventListener('click',()=>{
+navItems[3].addEventListener('click',()=>{
     window.location='/login';
 })
-navItems[5].addEventListener('click',()=>{
+navItems[4].addEventListener('click',()=>{
     window.location='/logout';
 })
 

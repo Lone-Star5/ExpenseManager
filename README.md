@@ -2,6 +2,9 @@
 
 It is an Expense Manager Application where users can allocate a budget, and track down their expenses for various items that they spend money on. It shows the data in graphical manner using Pie Chart and Bar graph. User can add different categories for adding their expenses and can get a summary of how much they have spent with respect to the budget allocated.
 
+# Screenshots
+![alt text](/images/Screenshot_1.png?raw=true)
+
 ## Installation
 
 You first need to download NodeJs which can be found [here](https://nodejs.org/en/download/)
