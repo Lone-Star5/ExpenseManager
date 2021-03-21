@@ -1,4 +1,4 @@
-# Polling Website
+# Expense Manager
 
 It is an Expense Manager Application where users can allocate a budget, and track down their expenses for various items that they spend money on. It shows the data in graphical manner using Pie Chart and Bar graph. User can add different categories for adding their expenses and can get a summary of how much they have spent with respect to the budget allocated.
 
@@ -12,7 +12,7 @@ Now you need to download MongoDB which can be found [here](https://docs.mongodb.
 After installing NodeJs and MongoDB, Use the git clone command to clone the repository
 
 ```bash
-git clone https://github.com/Lone-Star5/pollingwebsite.git
+git clone https://github.com/Lone-Star5/ExpenseManager.git
 ```
 
 Open the folder where you have cloned the repository in your terminal and type the following command to download all the dependencies
