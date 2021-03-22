@@ -28,15 +28,11 @@
                         <div class="col-md-6">
                             <div id="budget-overview">
                                 <div> Budget Overview</div>
-                                <div class="mt-3 row">
+                                <div class="row">
                                     <div class="col-md-6">
-                                        <div id="expense-percentage-container">
-                                            <div id="expense-percentage">
-                                                
-                                            </div>
-                                        </div>
+                                        <canvas id="expense-percentage" width="200" height="173"></canvas>
                                     </div>
-                                    <div style="text-align: center;font-size:1.2rem;" class="col-md-6">
+                                    <div style="text-align: center;font-size:1.2rem;" class="mt-4 col-md-6">
                                         <div> Total Budget </div>
                                         <div> Rs <%= budget.budget %> </div>
                                         <div class="mt-3">Total Expenditure</div>
@@ -223,8 +219,46 @@
             val = Number(data["expenditure"])*100/Number(data["budget"])
         if(val>100)
             val=100;
-        document.getElementById('expense-percentage').innerText = String(val)+" %";
+        // document.getElementById('expense-percentage').innerText = String(val)+" %";
+
+        var canvas = document.getElementById('expense-percentage');
+        var context = canvas.getContext('2d');
+        var al=0;
+        var start=4.72;
+        var cw=context.canvas.width/2;
+        var ch=context.canvas.height/2;
+        var diff;
+        
+        function progressBar(){
+            diff=(al/100)*Math.PI*2;
+            context.clearRect(0,0,400,200);
+            context.beginPath();
+            context.arc(cw,ch,50,0,2*Math.PI,false);
+            context.fillStyle='#FFF';
+            context.fill();
+            context.strokeStyle='#e7f2ba';
+            context.stroke();
+            context.fillStyle='#000';
+            context.strokeStyle='#b3cf3c';
+            context.textAlign='center';
+            context.lineWidth=15;
+            context.font = '10pt Verdana';
+            context.beginPath();
+            context.arc(cw,ch,50,start,diff+start,false);
+            context.stroke();
+            context.fillText(al+'%',cw+2,ch+6);
+            if(al>=val){
+                clearTimeout(bar);
+            }
+            
+            al++;
+        }
+        
+        var bar=setInterval(progressBar,50);
     </script>
+    
+    <!-- Expense Percentage -->
+
     
     <script>
 

@@ -36,20 +36,6 @@ html,body{
     padding: 20px;
     margin-bottom: 20px;
 }
-#expense-percentage-container{
-    padding: 5px;
-    border: 5px double red;
-    border-radius: 50%;
-    height: 10rem;
-    font-size: 2.5rem;
-}
-#expense-percentage{
-    padding: 20px;
-    margin:auto;
-    margin-top:10px;
-    text-align: center;
-    height: 100%;
-}
 
 .settings-items{
     text-align: center;
