@@ -101,9 +101,11 @@ app.post('/expense/edit', isLoggedIn, (req,res)=>{
         delete req.body.id;
         expense.findById(id,(err,oldexpense)=>{
             let oldamt = oldexpense.amount;
+            req.body.delete=oldexpense.delete;
             expense.findByIdAndUpdate(id, req.body, (err,newexpense)=>{
                 budget.find({user:req.user},(err,oldbudget)=>{
-                    oldbudget[0].expenditure = oldbudget[0].expenditure - oldamt + Number(req.body.amount);
+                    if(req.body.delete==false)
+                        oldbudget[0].expenditure = oldbudget[0].expenditure - oldamt + Number(req.body.amount);
                     budget.updateOne({user:req.user},oldbudget[0], (err,newbudget)=>{
                         res.redirect('/')
                     })
